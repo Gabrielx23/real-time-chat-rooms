@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/materialIcons.css">
+    <link rel="stylesheet" href="/css/dataTables.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery-3.4.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/dataTables.min.js"></script>
+    <script src="/js/definitions.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('.datatable').DataTable();
+        });
+    </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/rooms">Real Time Chat Rooms</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarColor01">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello <span id="userNickname"></span>!
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#changeNicknameModal">Change nickname</a>
+              </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/rooms/create">Create room</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<%- include ("../partials/flash.ejs", {
+    error: locals.error && locals.error != '' ? locals.error : false,
+    success: locals.success && locals.success != '' ? locals.success : false,
+}) %>

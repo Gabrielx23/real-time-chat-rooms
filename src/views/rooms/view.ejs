@@ -1,0 +1,79 @@
+<%- include ("../partials/header.ejs", {title: locals.room.name}) %>
+<div class="mt-3 container-fluid">
+    <input type="hidden" value="<%= locals.room.id %>" id="roomId">
+    <div class="row">
+        <div class="col-6">
+            <b>Room: </b> <%= locals.room.name %> <br>
+            <b>Online: </b> <span id="channelOnlineCount_<%= locals.room.id %>"><%= locals.onlineAmount %></span>
+        </div>
+        <div class="col-6">
+            <h2 class="text-right"><a href="/rooms"><i class="material-icons">backspace</i> back</a></h2>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <form>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="form-group">
+                            <textarea class="form-control" id="messageArea" name="message" placeholder="Your message..."></textarea>
+                        </div>
+                    </div>
+                    <div class="col-4 pl-0">
+                        <div class="form-group">
+                            <button type="submit" id="sendMessageButton" class="btn btn-primary w-100">Send</button>
+                            <button type="reset" class="btn btn-secondary w-100 mt-2">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="col-md-12" id="messagesContainer">
+            <% locals.messages.forEach(message => { %>
+                <hr>
+                <div class="message">
+                    (<%= message.createdAt %>) <b><%= message.author %>: </b> <%= message.content %>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
+
+<script>
+    const socket = io()
+    const roomId = document.getElementById('roomId').value
+    const messagesContainer = document.getElementById('messagesContainer')
+    const sendMessageButton = document.getElementById('sendMessageButton')
+    const messageInput = document.getElementById('messageArea')
+    const channelOnlineCountElement = document.getElementById('channelOnlineCount_' + roomId)
+
+    socket.emit('joinRoom', { roomId, sessionId })
+
+    sendMessageButton.addEventListener('click', (event) => {
+        event.preventDefault()
+        if (messageInput.value) {
+            const message = messageInput.value
+            socket.emit('message', { userNickname, message, roomId })
+            messageInput.value = ''
+        }
+    })
+
+    socket.on('updateOnlineUsersAmount', ({roomOnlineAmount}) => {
+        channelOnlineCountElement.innerHTML = roomOnlineAmount
+    })
+
+    socket.on('newMessage', ({messageData}) => {
+        messageData.createdAt = (new Date(messageData.createdAt)).toUTCString()
+
+        const message = `
+            <hr>
+            <div class="message">
+                (${messageData.createdAt}) <b>${messageData.author}: </b> ${messageData.content}
+            </div>
+        `
+        messagesContainer.innerHTML = message + messagesContainer.innerHTML
+    })
+</script>
+
+<%- include ("../partials/footer.ejs") %>
