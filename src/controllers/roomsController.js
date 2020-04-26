@@ -34,7 +34,8 @@ module.exports.create = (req, res) => {
 module.exports.store = async (req, res, next) => {
     const room = await Room.create({
         name: req.body.name,
-        description: req.body.description
+        description: req.body.description,
+        category: req.body.category,
     })
 
     req.flash('success', room.name + ' created!')

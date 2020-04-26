@@ -2,6 +2,7 @@ import {check, validationResult} from 'express-validator'
 
 exports.rules = [
     check('name').trim().isLength({min: 1}).withMessage('required'),
+    check('category').trim().isLength({min: 1}).withMessage('required'),
 ]
 
 exports.validate = (req, res, next) => {

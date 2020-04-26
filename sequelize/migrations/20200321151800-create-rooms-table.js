@@ -10,6 +10,10 @@ module.exports.up = (queryInterface, DataTypes) => {
             allowNull: false,
             type: DataTypes.STRING
         },
+        category: {
+            allowNull: false,
+            type: DataTypes.STRING
+        },
         description: {
             allowNull: true,
             type: DataTypes.TEXT
